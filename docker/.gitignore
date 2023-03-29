@@ -1,0 +1,4 @@
+/postgres/*
+/postgres/
+/postgres/datadir/
+/nginx/logs/

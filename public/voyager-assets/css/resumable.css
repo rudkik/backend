@@ -1,0 +1,29 @@
+.resumable {
+    display: flex;
+    flex-direction: column;
+}
+.resumable .dropzone {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    cursor: pointer;
+    border-width: 2px;
+    border-style: dashed;
+    text-align: center;
+}
+.resumable .dropzone.dragover{
+    border-color: #22a7f0;
+}
+.resumable .dropzone i{
+    font-size: 2rem;
+}
+.resumable .dropzone small {
+    font-size: 0.65em;
+    display: block;
+}
+.resumable-wrapper .status-canceled {
+    text-decoration: line-through;
+}

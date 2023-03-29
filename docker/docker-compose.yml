@@ -1,0 +1,58 @@
+version: '3.7'
+
+networks:
+  rdrive:
+    driver: bridge
+
+services:
+  nginx:
+    container_name: ${APP_NAME}_nginx
+    image: nginx:alpine
+    volumes:
+      - ../:/var/www:delegated
+      - ./nginx/:/etc/nginx/conf.d:delegated
+      - ./nginx/vhosts:/etc/nginx/vhosts:delegated
+      - ./nginx/logs:/var/log/nginx:delegated
+    depends_on:
+      - php-fpm
+    networks:
+      - rdrive
+  php-fpm:
+    container_name: ${APP_NAME}_php
+      #build:
+    #context: php-fpm
+    #dockerfile: Dockerfile
+    image: rocketfirm911/php-fpm:7.4
+    volumes:
+      - ../:/var/www:delegated
+      - ./php-fpm/php.ini:/usr/local/etc/php/conf.d/40-custom.ini:delegated
+      - ~/.ssh:/home/www-data/.ssh:delegated
+    networks:
+      - rdrive
+    depends_on:
+      - postgres
+  postgres:
+    container_name: ${APP_NAME}_database
+    image: postgres:12
+    restart: always
+    ports:
+      - ${EXTERNAL_DB_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./postgres/datadir:/var/lib/postgresql/data
+    networks:
+      - rdrive
+  adminer:
+    container_name: ${APP_NAME}_adminer
+    image: adminer
+    depends_on:
+      - postgres
+    networks:
+      - rdrive
+  redis:
+    image: redis:alpine
+    networks:
+      - rdrive
+
